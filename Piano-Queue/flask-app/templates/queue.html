@@ -1,0 +1,67 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8"><title>my webpage</title>
+        <link rel="icon" href="data:;base64,=">
+        <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    </head>
+    <body>
+    <h1>Piano Queue</h1>
+    <form>
+        <label>Song name:</label><br>
+        <input type="text" id="song_name"><br>
+        <label>Song artist:</label><br>
+        <input type="text" id="song_artist"><br><br>
+    </form> 
+    <button onclick="add_to_queue()">Add Song to Queue</button>
+    <p style="display: inline">(Refresh page to see queue changes)</p>
+    <table>
+        <tr>
+          <th>Song</th>
+          <th>Artist</th>
+        </tr>
+        {% for item in lst %}
+            <tr>
+                <td>{{item[1]}}</td>
+                <td>{{item[2]}} <button style="float: right; margin-bottom: -5px;", 
+                                    onclick="delete_from_queue({{item[0]}})">Delete</button></td>
+            </tr>
+        {% endfor %}
+    </table>
+    <script>
+    function add_to_queue() {
+        var song_name = document.getElementById('song_name').value;
+        var song_artist = document.getElementById('song_artist').value;
+        var payload = {
+            song_name: song_name,
+            song_artist: song_artist
+        };
+        var data = new FormData();
+        data.append('json', JSON.stringify(payload));
+
+        fetch('http://localhost:5000/addToQueue',
+        {
+            method: "POST",
+            body: data
+        })
+        .then((response) => location.reload(true));
+    }
+
+    function delete_from_queue(song_id) {
+        var payload = {
+            song_id: song_id
+        };
+        var data = new FormData();
+        data.append('json', JSON.stringify(payload));
+
+        fetch('http://localhost:5000/deleteFromQueue',
+        {
+            method: "POST",
+            body: data
+        })
+        .then((response) => location.reload(true));
+    }
+    </script>
+    </body>
+</html>

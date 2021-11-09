@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
     <head>
-        <meta charset="utf-8"><title>my webpage</title>
+        <meta charset="utf-8"><title>Piano Queue</title>
         <link rel="icon" href="data:;base64,=">
         <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -16,15 +16,17 @@
     </form> 
     <button onclick="add_to_queue()">Add Song to Queue</button>
     <p style="display: inline">(Refresh page to see queue changes)</p>
-    <table>
+    <table id="myTable">
         <tr>
           <th>Song</th>
           <th>Artist</th>
+          <th>Priority</th>
         </tr>
         {% for item in lst %}
             <tr>
                 <td>{{item[1]}}</td>
-                <td>{{item[2]}} <button style="float: right; margin-bottom: -5px;", 
+                <td>{{item[2]}}</td>
+                <td>{{item[0]}} <button style="float: right; margin-bottom: -5px;", 
                                     onclick="delete_from_queue({{item[0]}})">Delete</button></td>
             </tr>
         {% endfor %}
